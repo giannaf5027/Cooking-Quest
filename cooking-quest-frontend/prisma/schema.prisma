@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password        String
+  name            String?
+  resetToken      String?
+  resetTokenExpiry DateTime?
+}
+// Recipe implementation requests submitted from the request bar (Purab, 10/13/2026)
+model RecipeRequest {
+  id          String   @id @default(cuid())
+  title       String
+  note        String?
+  requestedBy String?
+  status      String   @default("open") // open | planned | added | declined
+  createdAt   DateTime @default(now())
+}
