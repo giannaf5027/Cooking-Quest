@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -9,16 +11,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Flame, Clock, ChefHat, ArrowLeft, Heart, Share2, Award, CheckCircle2 } from "lucide-react"
-import GameSelector from "@/components/games/GameSelector"
 import { useAuth } from "@/lib/auth-context"
-import { AddToMealPlan } from "@/components/add-to-meal-plan"
 
 // Mock recipe data - in a real app, this would be fetched from an API
 const MOCK_RECIPES = [
   {
     id: "1",
     title: "Spaghetti with Meatballs",
-    image: "/placeholder.svg?height=500&width=800",
+    image: PH,
     spiceLevel: 2,
     cookTime: "30-35 minutes",
     difficulty: "Medium",
@@ -50,7 +50,7 @@ const MOCK_RECIPES = [
           "In a large bowl, combine ground beef, breadcrumbs, Parmesan, garlic, egg, oregano, salt, and pepper. Mix gently with your hands until just combined. Form into 1-inch meatballs.",
         gameType: "none",
         timer: null,
-        image: "/placeholder.svg?height=300&width=400&text=Step+1",
+        image: PH,
       },
       {
         title: "Chop the Ingredients",
@@ -58,7 +58,7 @@ const MOCK_RECIPES = [
         gameType: "chop",
         emoji: "🧅",
         timer: null,
-        image: "/placeholder.svg?height=300&width=400&text=Step+2",
+        image: PH,
       },
       {
         title: "Cook the Meatballs",
@@ -67,7 +67,7 @@ const MOCK_RECIPES = [
         gameType: "flip",
         emoji: "🍖",
         timer: 10 * 60, // 10 minutes in seconds
-        image: "/placeholder.svg?height=300&width=400&text=Step+3",
+        image: PH,
       },
       {
         title: "Make the Sauce",
@@ -77,14 +77,14 @@ const MOCK_RECIPES = [
         emoji: "🍅",
         liquidColor: "#e53e3e",
         timer: 5 * 60, // 5 minutes in seconds
-        image: "/placeholder.svg?height=300&width=400&text=Step+4",
+        image: PH,
       },
       {
         title: "Simmer",
         description: "Return meatballs to the sauce. Reduce heat to low and simmer, covered, for 15-20 minutes.",
         gameType: "none",
         timer: 20 * 60, // 20 minutes in seconds
-        image: "/placeholder.svg?height=300&width=400&text=Step+5",
+        image: PH,
       },
       {
         title: "Cook the Pasta",
@@ -92,7 +92,7 @@ const MOCK_RECIPES = [
           "Meanwhile, cook spaghetti in a large pot of salted boiling water according to package directions until al dente. Drain.",
         gameType: "none",
         timer: 10 * 60, // 10 minutes in seconds
-        image: "/placeholder.svg?height=300&width=400&text=Step+6",
+        image: PH,
       },
       {
         title: "Serve",
@@ -100,7 +100,7 @@ const MOCK_RECIPES = [
           "Serve spaghetti topped with meatballs and sauce. Garnish with fresh basil and additional Parmesan cheese.",
         gameType: "none",
         timer: null,
-        image: "/placeholder.svg?height=300&width=400&text=Step+7",
+        image: PH,
       },
     ],
     nutrition: {
@@ -178,9 +178,6 @@ export default function RecipeDetailPage() {
   }
 
   // Handle game completion
-  const handleGameComplete = () => {
-    handleStepComplete(currentStep)
-  }
 
   // Handle favorite toggle
   const handleFavoriteToggle = () => {
@@ -210,7 +207,7 @@ export default function RecipeDetailPage() {
       {/* Recipe Header */}
       <div className="grid gap-6 mb-8 md:grid-cols-2">
         <div className="overflow-hidden rounded-lg">
-          <img src={recipe.image || "/placeholder.svg"} alt={recipe.title} className="object-cover w-full h-full" />
+          <img src={PH} alt={recipe.title} className="object-cover w-full h-full" />
         </div>
 
         <div className="flex flex-col">
@@ -262,17 +259,13 @@ export default function RecipeDetailPage() {
           <div className="flex flex-wrap gap-2 mt-auto">
             {user ? (
               <>
-                <Button asChild className="gap-2 bg-rose-500 hover:bg-rose-600">
-                  <Link href={`/recipes/${recipe.id}/virtual`}>
-                    <ChefHat className="w-4 h-4" />
-                    Cook Virtually
-                  </Link>
+                <Button disabled className="gap-2 bg-rose-500 hover:bg-rose-600">
+                  <ChefHat className="w-4 h-4" />
+                  Cook Virtually — coming soon
                 </Button>
-                <Button asChild variant="outline" className="gap-2">
-                  <Link href={`/recipes/${recipe.id}/real-life`}>
-                    <ChefHat className="w-4 h-4" />
-                    Cook in Real Life
-                  </Link>
+                <Button disabled variant="outline" className="gap-2">
+                  <ChefHat className="w-4 h-4" />
+                  Cook in Real Life — coming soon
                 </Button>
                 <Button
                   variant="ghost"
@@ -285,7 +278,7 @@ export default function RecipeDetailPage() {
                 <Button variant="ghost" size="icon">
                   <Share2 className="w-5 h-5" />
                 </Button>
-                <AddToMealPlan recipeId={recipe.id} recipeTitle={recipe.title} recipeImage={recipe.image} />
+
               </>
             ) : (
               <>
@@ -398,17 +391,13 @@ export default function RecipeDetailPage() {
                       towards your next level!
                     </p>
                     <div className="grid grid-cols-2 gap-4">
-                      <Button asChild className="gap-2 bg-amber-500 hover:bg-amber-600">
-                        <Link href={`/recipes/${recipe.id}/virtual`}>
-                          <ChefHat className="w-4 h-4" />
-                          Virtual: {recipe.xpReward / 2} XP
-                        </Link>
+                      <Button disabled className="gap-2 bg-amber-500 hover:bg-amber-600">
+                        <ChefHat className="w-4 h-4" />
+                        Virtual: {recipe.xpReward / 2} XP — coming soon
                       </Button>
-                      <Button asChild variant="outline" className="gap-2 border-amber-200 dark:border-amber-800">
-                        <Link href={`/recipes/${recipe.id}/real-life`}>
-                          <ChefHat className="w-4 h-4" />
-                          Real Life: {recipe.xpReward} XP
-                        </Link>
+                      <Button disabled variant="outline" className="gap-2 border-amber-200 dark:border-amber-800">
+                        <ChefHat className="w-4 h-4" />
+                        Real Life: {recipe.xpReward} XP — coming soon
                       </Button>
                     </div>
                   </div>
@@ -421,7 +410,7 @@ export default function RecipeDetailPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex items-center gap-2">
                         <div className="p-2 text-emerald-600 bg-emerald-100 dark:bg-emerald-900/40 rounded-full">
-                          <img src="/placeholder.svg?height=24&width=24" alt="Pasta Master" className="w-6 h-6" />
+                          <img src={PH} alt="Pasta Master" className="w-6 h-6" />
                         </div>
                         <div>
                           <p className="text-sm font-medium">Pasta Master</p>
@@ -430,7 +419,7 @@ export default function RecipeDetailPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="p-2 text-emerald-600 bg-emerald-100 dark:bg-emerald-900/40 rounded-full">
-                          <img src="/placeholder.svg?height=24&width=24" alt="Italian Chef" className="w-6 h-6" />
+                          <img src={PH} alt="Italian Chef" className="w-6 h-6" />
                         </div>
                         <div>
                           <p className="text-sm font-medium">Italian Chef</p>
@@ -535,7 +524,7 @@ export default function RecipeDetailPage() {
                   <div className="space-y-4">
                     <div className="aspect-video overflow-hidden rounded-lg">
                       <img
-                        src={currentStepData.image || "/placeholder.svg"}
+                        src={PH}
                         alt={currentStepData.title}
                         className="object-cover w-full h-full"
                       />
@@ -545,14 +534,7 @@ export default function RecipeDetailPage() {
                     <p className="text-muted-foreground">{currentStepData.description}</p>
 
                     {/* Game Component */}
-                    {currentStepData.gameType !== "none" && (
-                      <GameSelector
-                        gameType={currentStepData.gameType}
-                        onComplete={handleGameComplete}
-                        emoji={currentStepData.emoji}
-                        liquidColor={currentStepData.liquidColor}
-                      />
-                    )}
+                    
 
                     {/* Timer */}
                     {currentStepData.timer && (

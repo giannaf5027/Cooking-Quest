@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -138,7 +140,7 @@ export function MealPlannerCalendar() {
                         <div className="flex items-center gap-1">
                           <div className="w-6 h-6 rounded overflow-hidden shrink-0">
                             <img
-                              src={meal.image || "/placeholder.svg"}
+                              src={PH}
                               alt={meal.title}
                               className="w-full h-full object-cover"
                             />

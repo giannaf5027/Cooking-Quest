@@ -32,9 +32,7 @@ export default function ClientLayout({
                 © {new Date().getFullYear()} CookMama. All rights reserved.
               </p>
               <div className="flex items-center gap-4">
-                <a href="/about" className="text-sm text-muted-foreground hover:underline">
-                  About
-                </a>
+
                 <a href="/privacy" className="text-sm text-muted-foreground hover:underline">
                   Privacy
                 </a>

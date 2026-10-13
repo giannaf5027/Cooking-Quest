@@ -9,9 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "CookMama - Cook, Play, Learn",
   description: "Learn to cook through fun gameplay and unlock real recipes!",
-  icons: {
-    icon: "/logo.png"
-  },
+  generator: "v0.dev",
 };
 
 export default function RootLayout({

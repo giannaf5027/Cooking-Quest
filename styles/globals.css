@@ -20,14 +20,10 @@
     --theme-primary-foreground: var(--primary-foreground);
     --theme-accent: var(--accent);
     --theme-accent-foreground: var(--accent-foreground);
-
-    /* Selected State Colors */
-    --selected: #f3f4f6; /* default selected bg (light gray) */
-    --selected-foreground: #222938;
   }
 
   .dark {
-    --background: 0 0% 5.9%;
+    --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --primary: 0 72.2% 50.6%;
     --primary-foreground: 0 85.7% 97.3%;
@@ -40,10 +36,6 @@
     --theme-primary-foreground: var(--primary-foreground);
     --theme-accent: var(--accent);
     --theme-accent-foreground: var(--accent-foreground);
-
-    /* Selected State Colors */
-    --selected: #222e3f; /* darker selected bg */
-    --selected-foreground: #fff;
   }
 
   /* Emerald Theme - Light */
@@ -52,9 +44,6 @@
     --primary-foreground: 155 100% 97.3%;
     --accent: 152 60% 95%;
     --accent-foreground: 152 60% 20%;
-
-    --selected: #d1fae5;
-    --selected-foreground: #065f46;
   }
   /* Emerald Theme - Dark */
   .dark.theme-emerald {
@@ -62,9 +51,6 @@
     --primary-foreground: 155 100% 97.3%;
     --accent: 152 60% 25%;
     --accent-foreground: 152 60% 90%;
-
-    --selected: #065f46;
-    --selected-foreground: #d1fae5;
   }
 
   /* Amber Theme - Light */
@@ -73,9 +59,6 @@
     --primary-foreground: 0 0% 0%;
     --accent: 38 92% 95%;
     --accent-foreground: 38 92% 20%;
-
-    --selected: #fef3c7;
-    --selected-foreground: #78350f;
   }
   /* Amber Theme - Dark */
   .dark.theme-amber {
@@ -83,9 +66,6 @@
     --primary-foreground: 0 0% 0%;
     --accent: 38 92% 25%;
     --accent-foreground: 38 92% 90%;
-
-    --selected: #78350f;
-    --selected-foreground: #fef3c7;
   }
 
   /* Sky Theme - Light */
@@ -94,9 +74,6 @@
     --primary-foreground: 195 100% 97.3%;
     --accent: 199 89% 95%;
     --accent-foreground: 199 89% 20%;
-
-    --selected: #e0f2fe;
-    --selected-foreground: #0c4a6e;
   }
   /* Sky Theme - Dark */
   .dark.theme-sky {
@@ -104,9 +81,6 @@
     --primary-foreground: 195 100% 97.3%;
     --accent: 199 89% 25%;
     --accent-foreground: 199 89% 90%;
-
-    --selected: #0c4a6e;
-    --selected-foreground: #e0f2fe;
   }
 }
 /* Rose Theme - Light */
@@ -115,9 +89,6 @@
   --primary-foreground: 355 100% 97.3%;
   --accent: 346 77% 95%;
   --accent-foreground: 346 77% 20%;
-
-  --selected: #ffe4e6;
-  --selected-foreground: #881337;
 }
 /* Rose Theme - Dark */
 .dark.theme-rose {
@@ -125,9 +96,6 @@
   --primary-foreground: 355 100% 97.3%;
   --accent: 346 77% 25%;
   --accent-foreground: 346 77% 90%;
-
-  --selected: #881337;
-  --selected-foreground: #ffe4e6;
 }
 
 

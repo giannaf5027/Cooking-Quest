@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +11,6 @@ import { ChefHat, Search, Heart, MessageCircle, Bookmark, Trophy, Users } from "
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { RecipeCard } from "@/components/recipe-card"
 import { MealPlannerCalendar } from "@/components/meal-planner/calendar"
 // Import the FriendSearch component
 import { FriendSearch } from "@/components/friend-search"
@@ -18,56 +19,7 @@ import { UserProfileView, type UserProfileData } from "@/components/user-profile
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // Mock recipe data
-const MOCK_RECIPES = [
-  {
-    id: "1",
-    title: "Spaghetti with Meatballs",
-    image: "/placeholder.svg?height=300&width=400&text=Spaghetti",
-    spiceLevel: 2,
-    cookTime: "30-35 minutes",
-    tags: ["Italian", "Pasta", "Meat"],
-  },
-  {
-    id: "2",
-    title: "Vegetable Stir Fry",
-    image: "/placeholder.svg?height=300&width=400&text=Stir+Fry",
-    spiceLevel: 3,
-    cookTime: "15-20 minutes",
-    tags: ["Vegetarian", "Asian", "Quick"],
-  },
-  {
-    id: "3",
-    title: "Chocolate Chip Cookies",
-    image: "/placeholder.svg?height=300&width=400&text=Cookies",
-    spiceLevel: 0,
-    cookTime: "40-60 minutes",
-    tags: ["Dessert", "Baking", "Sweet"],
-  },
-  {
-    id: "4",
-    title: "Beef Tacos",
-    image: "/placeholder.svg?height=300&width=400&text=Tacos",
-    spiceLevel: 4,
-    cookTime: "30-35 minutes",
-    tags: ["Mexican", "Spicy", "Meat"],
-  },
-  {
-    id: "5",
-    title: "Vegetarian Pizza",
-    image: "/placeholder.svg?height=300&width=400&text=Pizza",
-    spiceLevel: 1,
-    cookTime: "40-60 minutes",
-    tags: ["Italian", "Vegetarian", "Baking"],
-  },
-  {
-    id: "6",
-    title: "Chicken Curry",
-    image: "/placeholder.svg?height=300&width=400&text=Curry",
-    spiceLevel: 5,
-    cookTime: "40-60 minutes",
-    tags: ["Indian", "Spicy", "Meat"],
-  },
-]
+const MOCK_RECIPES: any[] = [] // favorites populate once recipe data lands
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth()
@@ -108,14 +60,14 @@ export default function DashboardPage() {
     {
       id: "1",
       name: "Spaghetti with Meatballs",
-      image: "/placeholder.svg?height=80&width=80",
+      image: PH,
       lastCooked: "2 days ago",
     },
-    { id: "2", name: "Vegetable Stir Fry", image: "/placeholder.svg?height=80&width=80", lastCooked: "1 week ago" },
+    { id: "2", name: "Vegetable Stir Fry", image: PH, lastCooked: "1 week ago" },
     {
       id: "3",
       name: "Chocolate Chip Cookies",
-      image: "/placeholder.svg?height=80&width=80",
+      image: PH,
       lastCooked: "3 weeks ago",
     },
   ]
@@ -126,13 +78,13 @@ export default function DashboardPage() {
           {
             id: "pasta-master",
             name: "Pasta Master",
-            image: "/placeholder.svg?height=60&width=60",
+            image: PH,
             description: "Cooked 10 pasta dishes",
           },
           {
             id: "sweet-tooth",
             name: "Sweet Tooth",
-            image: "/placeholder.svg?height=60&width=60",
+            image: PH,
             description: "Baked 5 desserts",
           },
         ]
@@ -141,9 +93,9 @@ export default function DashboardPage() {
   const friends =
     user.friends.length > 0
       ? [
-          { id: "friend1", name: "Jane Smith", image: "/placeholder.svg?height=40&width=40", level: 5 },
-          { id: "friend2", name: "Mike Johnson", image: "/placeholder.svg?height=40&width=40", level: 7 },
-          { id: "friend3", name: "Sarah Williams", image: "/placeholder.svg?height=40&width=40", level: 4 },
+          { id: "friend1", name: "Jane Smith", image: PH, level: 5 },
+          { id: "friend2", name: "Mike Johnson", image: PH, level: 7 },
+          { id: "friend3", name: "Sarah Williams", image: PH, level: 4 },
         ]
       : []
 
@@ -256,7 +208,7 @@ export default function DashboardPage() {
               {recentRecipes.map((recipe) => (
                 <div key={recipe.id} className="flex items-center p-4 border rounded-lg bg-card">
                   <img
-                    src={recipe.image || "/placeholder.svg"}
+                    src={PH}
                     alt={recipe.name}
                     className="w-16 h-16 rounded-md object-cover mr-4"
                   />
@@ -295,15 +247,10 @@ export default function DashboardPage() {
           {favoriteRecipes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favoriteRecipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  id={recipe.id}
-                  title={recipe.title}
-                  image={recipe.image}
-                  spiceLevel={recipe.spiceLevel}
-                  cookTime={recipe.cookTime}
-                  tags={recipe.tags}
-                />
+                <div key={recipe.id} className="flex items-center gap-3 p-3 border rounded-lg bg-card">
+                  <span className="font-medium">{recipe.title}</span>
+                  <span className="text-muted-foreground text-sm">{recipe.cookTime}</span>
+                </div>
               ))}
             </div>
           ) : (
@@ -332,7 +279,7 @@ export default function DashboardPage() {
               {badges.map((badge) => (
                 <div key={badge.id} className="flex flex-col items-center p-4 border rounded-lg text-center bg-card">
                   <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                    <img src={badge.image || "/placeholder.svg"} alt={badge.name} className="w-12 h-12" />
+                    <img src={PH} alt={badge.name} className="w-12 h-12" />
                   </div>
                   <h3 className="font-medium text-sm">{badge.name}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
@@ -378,7 +325,7 @@ export default function DashboardPage() {
                 <div key={friend.id} className="flex items-center p-4 border rounded-lg bg-card">
                   <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mr-4">
                     <img
-                      src={friend.image || "/placeholder.svg"}
+                      src={PH}
                       alt={friend.name}
                       className="w-10 h-10 rounded-full object-cover"
                     />

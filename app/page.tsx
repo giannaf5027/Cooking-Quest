@@ -1,3 +1,4 @@
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ChefHat, Utensils, Trophy, Clock, Heart, Flame } from "lucide-react"
@@ -25,9 +26,7 @@ export default function Home() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/about">
-                  Learn More <ChefHat className="ml-2 h-4 w-4" />
-                </Link>
+
               </Button>
             </div>
           </div>
@@ -90,21 +89,21 @@ export default function Home() {
             {/* Recipe Cards */}
             <RecipeCard
               title="Spaghetti with Meatballs"
-              image="/placeholder.svg?height=300&width=400&text=Spaghetti"
+              image={PH}
               spiceLevel={2}
               cookTime="30-35 minutes"
               tags={["Italian", "Pasta"]}
             />
             <RecipeCard
               title="Vegetable Stir Fry"
-              image="/placeholder.svg?height=300&width=400&text=Stir+Fry"
+              image={PH}
               spiceLevel={3}
               cookTime="15-20 minutes"
               tags={["Vegetarian", "Asian", "Quick"]}
             />
             <RecipeCard
               title="Chocolate Chip Cookies"
-              image="/placeholder.svg?height=300&width=400&text=Cookies"
+              image={PH}
               spiceLevel={0}
               cookTime="40-60 minutes"
               tags={["Dessert", "Baking"]}
@@ -161,7 +160,7 @@ function RecipeCard({
     <div className="group relative overflow-hidden rounded-lg border bg-background shadow-sm transition-all hover:shadow-md">
       <div className="aspect-video overflow-hidden">
         <img
-          src={image || "/placeholder.svg"}
+          src={PH}
           alt={title}
           className="object-cover w-full h-full transition-transform group-hover:scale-105"
         />

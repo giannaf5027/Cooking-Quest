@@ -1,3 +1,4 @@
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
@@ -37,7 +38,7 @@ export function BadgeDisplay({ badges, maxDisplay = 5 }: BadgeDisplayProps) {
                 <Card className={`w-12 h-12 p-0 ${!badge.unlocked ? "opacity-40 grayscale" : ""}`}>
                   <CardContent className="p-0 flex items-center justify-center h-full">
                     <img
-                      src={badge.image || "/placeholder.svg"}
+                      src={PH}
                       alt={badge.name}
                       className="w-10 h-10 object-contain"
                     />
@@ -85,7 +86,7 @@ export function BadgeDisplay({ badges, maxDisplay = 5 }: BadgeDisplayProps) {
                     <Card className="w-10 h-10 p-0">
                       <CardContent className="p-0 flex items-center justify-center h-full">
                         <img
-                          src={badge.image || "/placeholder.svg"}
+                          src={PH}
                           alt={badge.name}
                           className="w-8 h-8 object-contain"
                         />

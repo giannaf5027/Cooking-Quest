@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
@@ -13,35 +15,35 @@ const MOCK_BADGES = [
   {
     id: "1",
     name: "Pasta Master",
-    image: "/placeholder.svg?height=60&width=60",
+    image: PH,
     description: "Cooked 10 pasta dishes",
     unlocked: true,
   },
   {
     id: "2",
     name: "Sweet Tooth",
-    image: "/placeholder.svg?height=60&width=60",
+    image: PH,
     description: "Baked 5 desserts",
     unlocked: true,
   },
   {
     id: "3",
     name: "Quick Chef",
-    image: "/placeholder.svg?height=60&width=60",
+    image: PH,
     description: "Completed 3 recipes under 20 minutes",
     unlocked: true,
   },
   {
     id: "4",
     name: "Spice Warrior",
-    image: "/placeholder.svg?height=60&width=60",
+    image: PH,
     description: "Cooked 5 spicy dishes",
     unlocked: true,
   },
   {
     id: "5",
     name: "Healthy Eater",
-    image: "/placeholder.svg?height=60&width=60",
+    image: PH,
     description: "Cooked 10 vegetarian meals",
     unlocked: true,
   },

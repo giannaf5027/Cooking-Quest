@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useState } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -10,7 +12,7 @@ const MOCK_RECIPES = [
   {
     id: "1",
     title: "Spaghetti with Meatballs",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 2,
     cookTime: "30-35 minutes",
     tags: ["Italian", "Pasta", "Meat"],
@@ -18,7 +20,7 @@ const MOCK_RECIPES = [
   {
     id: "2",
     title: "Vegetable Stir Fry",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 3,
     cookTime: "15-20 minutes",
     tags: ["Vegetarian", "Asian", "Quick"],
@@ -26,7 +28,7 @@ const MOCK_RECIPES = [
   {
     id: "3",
     title: "Chocolate Chip Cookies",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 0,
     cookTime: "40-60 minutes",
     tags: ["Dessert", "Baking", "Sweet"],
@@ -34,7 +36,7 @@ const MOCK_RECIPES = [
   {
     id: "4",
     title: "Beef Tacos",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 4,
     cookTime: "30-35 minutes",
     tags: ["Mexican", "Spicy", "Meat"],
@@ -42,7 +44,7 @@ const MOCK_RECIPES = [
   {
     id: "5",
     title: "Vegetarian Pizza",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 1,
     cookTime: "40-60 minutes",
     tags: ["Italian", "Vegetarian", "Baking"],
@@ -50,7 +52,7 @@ const MOCK_RECIPES = [
   {
     id: "6",
     title: "Chicken Curry",
-    image: "/placeholder.svg?height=300&width=400",
+    image: PH,
     spiceLevel: 5,
     cookTime: "40-60 minutes",
     tags: ["Indian", "Spicy", "Meat"],
@@ -94,7 +96,7 @@ export function RecipeSearchList({ onSelectRecipe }: RecipeSearchListProps) {
             >
               <div className="w-12 h-12 rounded overflow-hidden">
                 <img
-                  src={recipe.image || "/placeholder.svg"}
+                  src={PH}
                   alt={recipe.title}
                   className="w-full h-full object-cover"
                 />

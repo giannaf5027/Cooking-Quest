@@ -72,14 +72,7 @@ export default function Navbar() {
             >
               Home
             </Link>
-            <Link
-              href="/about"
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                pathname === "/about" ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              About
-            </Link>
+
             {user && (
               <>
                 <Link

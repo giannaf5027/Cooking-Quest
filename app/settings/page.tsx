@@ -1,5 +1,7 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
@@ -22,13 +24,13 @@ const MUSIC_TRACKS = [
 
 // Mock badge data
 const MOCK_BADGES = [
-  { id: "pasta-master", name: "Pasta Master", image: "/placeholder.svg?height=60&width=60", description: "Cooked 10 pasta dishes", unlocked: true },
-  { id: "sweet-tooth", name: "Sweet Tooth", image: "/placeholder.svg?height=60&width=60", description: "Baked 5 desserts", unlocked: true },
-  { id: "quick-chef", name: "Quick Chef", image: "/placeholder.svg?height=60&width=60", description: "Completed 3 recipes under 20 minutes", unlocked: true },
-  { id: "spice-warrior", name: "Spice Warrior", image: "/placeholder.svg?height=60&width=60", description: "Cooked 5 spicy dishes", unlocked: true },
-  { id: "healthy-eater", name: "Healthy Eater", image: "/placeholder.svg?height=60&width=60", description: "Cooked 10 vegetarian meals", unlocked: true },
-  { id: "master-chef", name: "Master Chef", image: "/placeholder.svg?height=60&width=60", description: "Reached level 10", unlocked: false },
-  { id: "social-butterfly", name: "Social Butterfly", image: "/placeholder.svg?height=60&width=60", description: "Connected with 10 friends", unlocked: false },
+  { id: "pasta-master", name: "Pasta Master", image: PH, description: "Cooked 10 pasta dishes", unlocked: true },
+  { id: "sweet-tooth", name: "Sweet Tooth", image: PH, description: "Baked 5 desserts", unlocked: true },
+  { id: "quick-chef", name: "Quick Chef", image: PH, description: "Completed 3 recipes under 20 minutes", unlocked: true },
+  { id: "spice-warrior", name: "Spice Warrior", image: PH, description: "Cooked 5 spicy dishes", unlocked: true },
+  { id: "healthy-eater", name: "Healthy Eater", image: PH, description: "Cooked 10 vegetarian meals", unlocked: true },
+  { id: "master-chef", name: "Master Chef", image: PH, description: "Reached level 10", unlocked: false },
+  { id: "social-butterfly", name: "Social Butterfly", image: PH, description: "Connected with 10 friends", unlocked: false },
 ]
 
 export default function SettingsPage() {
@@ -244,21 +246,12 @@ export default function SettingsPage() {
                 {MUSIC_TRACKS.map((track) => (
                   <div
                     key={track.id}
-                    className={`flex items-center justify-between p-3 rounded-md border transition-colors cursor-pointer ${
-                      cookingMusic === track.id
-                        ? "border-2 border-primary bg-[hsl(var(--selected))] text-[hsl(var(--selected-foreground))]"
-                        : "border border-transparent hover:bg-accent"
+                    className={`flex items-center justify-between p-3 rounded-md border ${
+                      cookingMusic === track.id ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                     }`}
-                    onClick={() => setCookingMusic(track.id)}
-                    tabIndex={0}
-                    onKeyDown={e => {
-                      if (e.key === "Enter" || e.key === " ") setCookingMusic(track.id)
-                    }}
-                    role="radio"
-                    aria-checked={cookingMusic === track.id}
                   >
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value={track.id} id={`music-${track.id}`} className="pointer-events-none" />
+                      <RadioGroupItem value={track.id} id={`music-${track.id}`} />
                       <Label htmlFor={`music-${track.id}`} className="cursor-pointer">
                         {track.title}
                       </Label>
@@ -291,13 +284,11 @@ export default function SettingsPage() {
                         .map((badge) => (
                           <div
                             key={badge.id}
-                            className={`flex flex-col items-center p-4 border rounded-lg text-center bg-card cursor-pointer hover:bg-accent ${
-                              displayedBadges.includes(badge.id) ? "border-2 border-primary" : "border border-transparent"
-                            }`}
+                            className="flex flex-col items-center p-4 border rounded-lg text-center bg-card cursor-pointer hover:bg-accent"
                             onClick={() => toggleBadge(badge.id)}
                           >
                             <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                              <img src={badge.image || "/placeholder.svg"} alt={badge.name} className="w-12 h-12" />
+                              <img src={PH} alt={badge.name} className="w-12 h-12" />
                             </div>
                             <h3 className="font-medium text-sm">{badge.name}</h3>
                             <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
@@ -321,7 +312,7 @@ export default function SettingsPage() {
                           onClick={() => toggleBadge(badge.id)}
                         >
                           <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                            <img src={badge.image || "/placeholder.svg"} alt={badge.name} className="w-12 h-12" />
+                            <img src={PH} alt={badge.name} className="w-12 h-12" />
                           </div>
                           <h3 className="font-medium text-sm">{badge.name}</h3>
                           <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
@@ -347,7 +338,7 @@ export default function SettingsPage() {
                   <Label
                     htmlFor="mascot-chef"
                     className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                      mascot === "chef" ? "border-primary" : "border-transparent"
+                      mascot === "chef" ? "border-rose-500" : "border-transparent"
                     }`}
                   >
                     <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -361,7 +352,7 @@ export default function SettingsPage() {
                   <Label
                     htmlFor="mascot-cat"
                     className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                      mascot === "cat" ? "border-primary" : "border-transparent"
+                      mascot === "cat" ? "border-rose-500" : "border-transparent"
                     }`}
                   >
                     <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -375,7 +366,7 @@ export default function SettingsPage() {
                   <Label
                     htmlFor="mascot-dog"
                     className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                      mascot === "dog" ? "border-primary" : "border-transparent"
+                      mascot === "dog" ? "border-rose-500" : "border-transparent"
                     }`}
                   >
                     <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -389,7 +380,7 @@ export default function SettingsPage() {
                   <Label
                     htmlFor="mascot-fox"
                     className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                      mascot === "fox" ? "border-primary" : "border-transparent"
+                      mascot === "fox" ? "border-rose-500" : "border-transparent"
                     }`}
                   >
                     <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -406,7 +397,7 @@ export default function SettingsPage() {
                       <Label
                         htmlFor="mascot-panda"
                         className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                          mascot === "panda" ? "border-primary" : "border-transparent"
+                          mascot === "panda" ? "border-rose-500" : "border-transparent"
                         }`}
                       >
                         <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -420,7 +411,7 @@ export default function SettingsPage() {
                       <Label
                         htmlFor="mascot-penguin"
                         className={`flex flex-col items-center gap-2 rounded-md border-2 p-4 hover:bg-accent cursor-pointer ${
-                          mascot === "penguin" ? "border-primary" : "border-transparent"
+                          mascot === "penguin" ? "border-rose-500" : "border-transparent"
                         }`}
                       >
                         <div className="h-16 w-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
@@ -456,9 +447,7 @@ export default function SettingsPage() {
               <RadioGroup value={timerSound} onValueChange={setTimerSound} className="space-y-2">
                 <div
                   className={`flex items-center justify-between p-3 rounded-md border ${
-                    timerSound === "bell"
-                      ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20"
-                      : "border border-transparent hover:bg-accent"
+                    timerSound === "bell" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -483,9 +472,7 @@ export default function SettingsPage() {
 
                 <div
                   className={`flex items-center justify-between p-3 rounded-md border ${
-                    timerSound === "alarm"
-                      ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20"
-                      : "border border-transparent hover:bg-accent"
+                    timerSound === "alarm" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -510,9 +497,7 @@ export default function SettingsPage() {
 
                 <div
                   className={`flex items-center justify-between p-3 rounded-md border ${
-                    timerSound === "chime"
-                      ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20"
-                      : "border border-transparent hover:bg-accent"
+                    timerSound === "chime" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -539,9 +524,7 @@ export default function SettingsPage() {
                   <>
                     <div
                       className={`flex items-center justify-between p-3 rounded-md border ${
-                        timerSound === "whistle"
-                          ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20"
-                          : "border border-transparent hover:bg-accent"
+                        timerSound === "whistle" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -566,9 +549,7 @@ export default function SettingsPage() {
 
                     <div
                       className={`flex items-center justify-between p-3 rounded-md border ${
-                        timerSound === "ding"
-                          ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20"
-                          : "border border-transparent hover:bg-accent"
+                        timerSound === "ding" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -605,7 +586,7 @@ export default function SettingsPage() {
 
                 <div
                   className={`flex items-center justify-between p-3 rounded-md border ${
-                    timerSound === "none" ? "border-2 border-primary bg-rose-50 dark:bg-rose-900/20" : "border border-transparent hover:bg-accent"
+                    timerSound === "none" ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20" : "hover:bg-accent"
                   }`}
                 >
                   <div className="flex items-center gap-3">

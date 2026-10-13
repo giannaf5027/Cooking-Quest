@@ -1,10 +1,11 @@
 "use client"
 
+const PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23d1d5db'/%3E%3Cpath d='M22 88c0-16 12-28 28-28s28 12 28 28' fill='%23d1d5db'/%3E%3C/svg%3E"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { RecipeCard } from "@/components/recipe-card"
 import { Search, Filter, X, ChevronDown, ChevronUp } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -13,68 +14,7 @@ import { Progress } from "@/components/ui/progress"
 import { useAuth } from "@/hooks/use-auth"
 
 // Mock recipe data
-const MOCK_RECIPES = [
-  {
-    id: "1",
-    title: "Spaghetti with Meatballs",
-    image: "/placeholder.svg?height=300&width=400&text=Spaghetti",
-    spiceLevel: 2,
-    cookTime: "30-35 minutes",
-    tags: ["Italian", "Pasta", "Meat"],
-    ingredients: ["pasta", "tomato", "beef", "garlic", "onion"],
-    difficulty: "medium",
-  },
-  {
-    id: "2",
-    title: "Vegetable Stir Fry",
-    image: "/placeholder.svg?height=300&width=400&text=Stir+Fry",
-    spiceLevel: 3,
-    cookTime: "15-20 minutes",
-    tags: ["Vegetarian", "Asian", "Quick"],
-    ingredients: ["broccoli", "carrot", "pepper", "soy sauce", "rice"],
-    difficulty: "easy",
-  },
-  {
-    id: "3",
-    title: "Chocolate Chip Cookies",
-    image: "/placeholder.svg?height=300&width=400&text=Cookies",
-    spiceLevel: 0,
-    cookTime: "40-60 minutes",
-    tags: ["Dessert", "Baking", "Sweet"],
-    ingredients: ["flour", "sugar", "chocolate", "butter", "eggs"],
-    difficulty: "easy",
-  },
-  {
-    id: "4",
-    title: "Beef Tacos",
-    image: "/placeholder.svg?height=300&width=400&text=Tacos",
-    spiceLevel: 4,
-    cookTime: "30-35 minutes",
-    tags: ["Mexican", "Spicy", "Meat"],
-    ingredients: ["beef", "tortilla", "tomato", "lettuce", "cheese"],
-    difficulty: "medium",
-  },
-  {
-    id: "5",
-    title: "Vegetarian Pizza",
-    image: "/placeholder.svg?height=300&width=400&text=Pizza",
-    spiceLevel: 1,
-    cookTime: "40-60 minutes",
-    tags: ["Italian", "Vegetarian", "Baking"],
-    ingredients: ["dough", "tomato sauce", "cheese", "vegetables", "olive oil"],
-    difficulty: "hard",
-  },
-  {
-    id: "6",
-    title: "Chicken Curry",
-    image: "/placeholder.svg?height=300&width=400&text=Curry",
-    spiceLevel: 5,
-    cookTime: "40-60 minutes",
-    tags: ["Indian", "Spicy", "Meat"],
-    ingredients: ["chicken", "curry powder", "coconut milk", "rice", "onion"],
-    difficulty: "medium",
-  },
-]
+const MOCK_RECIPES: any[] = [] // recipes arrive with the next push (recipe data not in yet)
 
 // Filter categories
 const FILTER_CATEGORIES = [
@@ -122,11 +62,7 @@ const FILTER_CATEGORIES = [
       { id: "slow-cooker", label: "Slow Cooker" },
       { id: "oven", label: "Oven" },
       { id: "stovetop", label: "Stovetop" },
-      { id: "blender", label: "Blender" },
-      { id: "microwave", label: "Microwave" },
-      { id: "toaster-oven", label: "Toaster Oven" },
-      { id: "pressure-cooker", label: "Pressure Cooker" },
-      ],
+    ],
   },
   {
     id: "time",
