@@ -9,10 +9,9 @@ import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { isSameDay } from "date-fns"
-import { PrismaClient } from "@prisma/client";
-export const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
+// Prisma calls moved to /api/auth/forgot-password and /api/auth/reset-password (Purab, 10/13/2026):
+// PrismaClient cannot run inside a "use client" component.
 
 // activity type
 type Activity = {
@@ -264,7 +263,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 (u) => u.email === usernameOrEmail || u.name === usernameOrEmail
             )
             if (!userMatch) throw error
-            const isValid = await bcrypt.compare(password, userMatch.password)
+            // mock admin is stored in plain text; locally signed-up users are bcrypt hashes
+            const isValid =
+                userMatch.password === password || (await bcrypt.compare(password, userMatch.password))
             if (!isValid) throw new Error("Invalid credentials")
             const loggedInUser: User = {
                 id: userMatch.id,
@@ -427,35 +428,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    // request password reset
+    // request password reset (server does the token work)
     const requestPasswordReset = async (email: string) => {
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (!user) throw new Error("User not found");
-        const token = crypto.randomBytes(32).toString("hex");
-        const expiry = new Date(Date.now() + 60 * 60 * 1000);
-        await prisma.user.update({
-            where: { email },
-            data: { resetToken: token, resetTokenExpiry: expiry },
-        });
-        console.log(`Reset link: ${window.location.origin}/reset-password?token=${token}&email=${email}`);
+        const res = await fetch("/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || "User not found")
     }
 
-    // reset password
+    // reset password (server validates the token)
     const resetPassword = async (email: string, token: string, newPassword: string) => {
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (!user || !user.resetToken || !user.resetTokenExpiry) throw new Error("Invalid or expired token");
-        if (user.resetToken !== token || user.resetTokenExpiry < new Date()) {
-            throw new Error("Invalid or expired token");
-        }
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await prisma.user.update({
-            where: { email },
-            data: {
-                password: hashedPassword,
-                resetToken: null,
-                resetTokenExpiry: null,
-            },
-        });
+        const res = await fetch("/api/auth/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, token, newPassword }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || "Invalid or expired token")
     }
 
     return (
