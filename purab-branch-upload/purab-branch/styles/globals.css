@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Theme Variables */
+@layer base {
+  :root {
+    /* Base Colors */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --primary: 0 72.2% 50.6%;
+    --primary-foreground: 0 85.7% 97.3%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    /* shadcn variables the components reference but the theme did not define (Purab, 10/13/2026) */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 72.2% 50.6%;
+    --radius: 0.5rem;
+
+    /* Default Theme Colors */
+    --theme-background: var(--background);
+    --theme-foreground: var(--foreground);
+    --theme-primary: var(--primary);
+    --theme-primary-foreground: var(--primary-foreground);
+    --theme-accent: var(--accent);
+    --theme-accent-foreground: var(--accent-foreground);
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --primary: 0 72.2% 50.6%;
+    --primary-foreground: 0 85.7% 97.3%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 72.2% 50.6%;
+
+    --theme-background: var(--background);
+    --theme-foreground: var(--foreground);
+    --theme-primary: var(--primary);
+    --theme-primary-foreground: var(--primary-foreground);
+    --theme-accent: var(--accent);
+    --theme-accent-foreground: var(--accent-foreground);
+  }
+
+  /* Emerald Theme - Light */
+  .theme-emerald {
+    --primary: 152 60% 36.5%;
+    --primary-foreground: 155 100% 97.3%;
+    --accent: 152 60% 95%;
+    --accent-foreground: 152 60% 20%;
+  }
+  /* Emerald Theme - Dark */
+  .dark.theme-emerald {
+    --primary: 152 60% 46.5%;
+    --primary-foreground: 155 100% 97.3%;
+    --accent: 152 60% 25%;
+    --accent-foreground: 152 60% 90%;
+  }
+
+  /* Amber Theme - Light */
+  .theme-amber {
+    --primary: 38 92% 50%;
+    --primary-foreground: 0 0% 0%;
+    --accent: 38 92% 95%;
+    --accent-foreground: 38 92% 20%;
+  }
+  /* Amber Theme - Dark */
+  .dark.theme-amber {
+    --primary: 38 92% 60%;
+    --primary-foreground: 0 0% 0%;
+    --accent: 38 92% 25%;
+    --accent-foreground: 38 92% 90%;
+  }
+
+  /* Sky Theme - Light */
+  .theme-sky {
+    --primary: 199 89% 48%;
+    --primary-foreground: 195 100% 97.3%;
+    --accent: 199 89% 95%;
+    --accent-foreground: 199 89% 20%;
+  }
+  /* Sky Theme - Dark */
+  .dark.theme-sky {
+    --primary: 199 89% 58%;
+    --primary-foreground: 195 100% 97.3%;
+    --accent: 199 89% 25%;
+    --accent-foreground: 199 89% 90%;
+  }
+}
+/* Rose Theme - Light */
+.theme-rose {
+  --primary: 346 77% 49.8%;
+  --primary-foreground: 355 100% 97.3%;
+  --accent: 346 77% 95%;
+  --accent-foreground: 346 77% 20%;
+}
+/* Rose Theme - Dark */
+.dark.theme-rose {
+  --primary: 346 77% 59.8%;
+  --primary-foreground: 355 100% 97.3%;
+  --accent: 346 77% 25%;
+  --accent-foreground: 346 77% 90%;
+}
+
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background-color: hsl(var(--theme-background));
+    color: hsl(var(--theme-foreground));
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Gradients */
+.bg-rose-gradient {
+  @apply bg-gradient-to-r from-rose-50 to-white dark:from-rose-950/20 dark:to-background;
+}
+
+.bg-amber-gradient {
+  @apply bg-gradient-to-r from-amber-50 to-white dark:from-amber-950/20 dark:to-background;
+}
+
+.bg-emerald-gradient {
+  @apply bg-gradient-to-r from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background;
+}
+
+.bg-sky-gradient {
+  @apply bg-gradient-to-r from-sky-50 to-white dark:from-sky-950/20 dark:to-background;
+}
+
+/* Custom Buttons */
+.btn-primary {
+  background-color: hsl(var(--theme-primary));
+  color: hsl(var(--theme-primary-foreground));
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: hsl(var(--theme-primary) / 0.9);
+}
+
+.btn-accent {
+  background-color: hsl(var(--theme-accent));
+  color: hsl(var(--theme-accent-foreground));
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-accent:hover {
+  background-color: hsl(var(--theme-accent) / 0.9);
+}
+
+/* Theme-Colored Elements */
+.border-theme {
+  border-color: hsl(var(--theme-primary));
+}
+
+.text-theme {
+  color: hsl(var(--theme-primary));
+}
+
+.bg-theme {
+  background-color: hsl(var(--theme-primary));
+}
+
+.hover\:bg-theme:hover {
+  background-color: hsl(var(--theme-primary) / 0.9);
+}
+
+.hover\:text-theme:hover {
+  color: hsl(var(--theme-primary));
+}
