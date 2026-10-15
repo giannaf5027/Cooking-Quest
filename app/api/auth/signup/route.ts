@@ -32,7 +32,15 @@ export async function POST(req: Request) {
             data: { name, email, password: hashedPassword },
         })
 
-        return NextResponse.json({ id: user.id, name: user.name, email: user.email })
+        return NextResponse.json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            xp: user.xp,
+            level: user.level,
+            isAdmin: user.isAdmin,
+            mascot: user.mascot,
+        })
     }
     catch (error) {
         console.error("Signup failed:", error)

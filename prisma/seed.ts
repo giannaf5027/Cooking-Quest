@@ -13,8 +13,8 @@ async function main() {
 
     await prisma.user.upsert({
         where: { email: "admin@cookmama.com" },
-        update: {},
-        create: { name: "Admin", email: "admin@cookmama.com", password: hashedAdmin },
+        update: { isAdmin: true },
+        create: { name: "Admin", email: "admin@cookmama.com", password: hashedAdmin, isAdmin: true },
     })
 
     console.log("Seed complete: admin@cookmama.com / cook123")

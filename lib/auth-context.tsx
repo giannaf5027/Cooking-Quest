@@ -9,7 +9,6 @@ import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { isSameDay } from "date-fns"
-import bcrypt from "bcryptjs";
 
 // activity type
 type Activity = {
@@ -59,15 +58,6 @@ type User = {
     }
 }
 
-// user credentials type for storage
-type UserCredential = {
-    id: string
-    name: string
-    email: string
-    password: string
-    isAdmin?: boolean
-}
-
 // settings type for updateUserSettings
 type UserSettings = {
     theme: string
@@ -84,7 +74,6 @@ type AuthContextType = {
     signIn: (usernameOrEmail: string, password: string) => Promise<void>
     signUp: (name: string, email: string, password: string) => Promise<void>
     signOut: () => void
-    users: UserCredential[]
     toggleFavorite: (recipeId: string) => void
     isFavorite: (recipeId: string) => boolean
     addXp: (amount: number) => void
@@ -103,20 +92,10 @@ type AuthContextType = {
 // create auth context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// mock admin user
-const ADMIN_USER: UserCredential = {
-    id: "admin_123",
-    name: "Admin",
-    email: "admin@cookmama.com",
-    password: "cook123",
-    isAdmin: true,
-}
-
 // auth provider component
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
-    const [users, setUsers] = useState<UserCredential[]>([ADMIN_USER])
     const router = useRouter()
 
     // check for existing session on mount
@@ -125,18 +104,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const storedUser = localStorage.getItem("cookmama_user")
             if (storedUser) {
                 setUser(JSON.parse(storedUser))
-            }
-
-            const storedUsers = localStorage.getItem("cookmama_users")
-            if (storedUsers) {
-                const parsedUsers = JSON.parse(storedUsers)
-                if (!parsedUsers.some((u: UserCredential) => u.id === ADMIN_USER.id)) {
-                    parsedUsers.push(ADMIN_USER)
-                }
-                setUsers(parsedUsers)
-            }
-            else {
-                localStorage.setItem("cookmama_users", JSON.stringify([ADMIN_USER]))
             }
 
             setIsLoading(false)
@@ -219,7 +186,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return user.mealPlans.find((plan) => isSameDay(new Date(plan.date), date))
     }
 
-    // sign in - hits the backend api first, falls back to local users so the mock admin still works
+    // recipes unlocked at a given level (same rules as addXp)
+    const recipesForLevel = (level: number) => {
+        const recipes = ["1", "2", "3"]
+        if (level >= 2) recipes.push("4", "5")
+        if (level >= 3) recipes.push("6")
+        return recipes
+    }
+
+    // sign in - checks the email/username and password with the backend api
     const signIn = async (usernameOrEmail: string, password: string) => {
         setIsLoading(true)
         try {
@@ -236,14 +211,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 name: data.name,
                 email: data.email,
                 image: null,
-                level: 1,
-                xp: 0,
+                level: data.level,
+                xp: data.xp,
+                isAdmin: data.isAdmin,
                 favorites: [],
                 badges: [],
                 friends: [],
                 mealPlans: [],
-                availableRecipes: ["1", "2", "3"],
-                mascot: "chef", // default mascot
+                availableRecipes: recipesForLevel(data.level),
+                mascot: data.mascot,
                 activities: [],
                 settings: {
                     theme: "default",
@@ -255,55 +231,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(loggedInUser)
             localStorage.setItem("cookmama_user", JSON.stringify(loggedInUser))
             router.push("/dashboard")
-        } catch (error) {
-            // fallback: local users array so the mock admin still works
-            const userMatch = users.find(
-                (u) => u.email === usernameOrEmail || u.name === usernameOrEmail
-            )
-            if (!userMatch) throw error
-            const isValid = await bcrypt.compare(password, userMatch.password)
-            if (!isValid) throw new Error("Invalid credentials")
-            const loggedInUser: User = {
-                id: userMatch.id,
-                name: userMatch.name,
-                email: userMatch.email,
-                image: null,
-                level: userMatch.isAdmin ? 2 : 1,
-                xp: userMatch.isAdmin ? 150 : 0,
-                isAdmin: userMatch.isAdmin,
-                favorites: [],
-                badges: userMatch.isAdmin ? ["admin", "master-chef", "pasta-master", "sweet-tooth"] : [],
-                friends: [],
-                mealPlans: [],
-                availableRecipes: userMatch.isAdmin ? ["1", "2", "3", "4", "5"] : ["1", "2", "3"],
-                mascot: "chef", // default mascot
-                activities: userMatch.isAdmin
-                    ? [
-                            {
-                                id: "act_1",
-                                type: "levelup",
-                                date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-                                level: 2,
-                                xp: 0,
-                            },
-                        ]
-                    : [],
-                settings: {
-                    theme: "default",
-                    cookingMusic: "1",
-                    displayedBadges: userMatch.isAdmin ? ["admin", "master-chef"] : [],
-                    timerSound: "bell",
-                },
-            }
-            setUser(loggedInUser)
-            localStorage.setItem("cookmama_user", JSON.stringify(loggedInUser))
-            router.push("/dashboard")
         } finally {
             setIsLoading(false)
         }
     }
 
-    // sign up - hits the backend api first, falls back to local users if the backend is unreachable
+    // sign up - creates the account through the backend api
     const signUp = async (name: string, email: string, password: string) => {
         setIsLoading(true)
         try {
@@ -320,52 +253,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 name: data.name,
                 email: data.email,
                 image: null,
-                level: 1,
-                xp: 0,
+                level: data.level,
+                xp: data.xp,
+                isAdmin: data.isAdmin,
                 favorites: [],
                 badges: [],
                 friends: [],
                 mealPlans: [],
-                availableRecipes: ["1", "2", "3"],
-                mascot: "chef",
-                activities: [],
-                settings: {
-                    theme: "default",
-                    cookingMusic: "1",
-                    displayedBadges: [],
-                    timerSound: "bell",
-                },
-            }
-            setUser(newUser)
-            localStorage.setItem("cookmama_user", JSON.stringify(newUser))
-            router.push("/dashboard")
-        } catch (error) {
-            // fallback: local users array so sign up still works
-            if (users.some((u) => u.email === email)) throw error
-            const hashedPassword = await bcrypt.hash(password, 10)
-            const newUserId = `user_${Date.now()}`
-            const newUserCredential: UserCredential = {
-                id: newUserId,
-                name,
-                email,
-                password: hashedPassword,
-            }
-            const updatedUsers = [...users, newUserCredential]
-            setUsers(updatedUsers)
-            localStorage.setItem("cookmama_users", JSON.stringify(updatedUsers))
-            const newUser: User = {
-                id: newUserId,
-                name,
-                email,
-                image: null,
-                level: 1,
-                xp: 0,
-                favorites: [],
-                badges: [],
-                friends: [],
-                mealPlans: [],
-                availableRecipes: ["1", "2", "3"],
-                mascot: "chef",
+                availableRecipes: recipesForLevel(data.level),
+                mascot: data.mascot,
                 activities: [],
                 settings: {
                     theme: "default",
@@ -454,7 +350,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 signIn,
                 signUp,
                 signOut,
-                users,
                 toggleFavorite,
                 isFavorite,
                 addXp,

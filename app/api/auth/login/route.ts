@@ -36,7 +36,15 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
         }
 
-        return NextResponse.json({ id: user.id, name: user.name, email: user.email })
+        return NextResponse.json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            xp: user.xp,
+            level: user.level,
+            isAdmin: user.isAdmin,
+            mascot: user.mascot,
+        })
     }
     catch (error) {
         console.error("Login failed:", error)
