@@ -38,7 +38,7 @@ export default function LoginPage() {
         } catch (error) {
             toast({
                 title: "Login failed",
-                description: "Please check your credentials and try again.",
+                                description: error instanceof Error ? error.message : "Please check your credentials and try again.",
                 variant: "destructive",
             })
         } finally {

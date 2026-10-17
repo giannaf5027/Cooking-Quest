@@ -14,4 +14,8 @@ model User {
   name            String?
   resetToken      String?
   resetTokenExpiry DateTime?
+  xp              Int      @default(0)
+  level           Int      @default(1)
+  isAdmin         Boolean  @default(false)
+  mascot          String   @default("chef")
 }
