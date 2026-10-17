@@ -414,12 +414,12 @@ export default function RecipesPage() {
                 Reach level 2 to unlock more delicious recipes. Keep cooking to earn XP!
               </p>
               <Progress
-                value={(user.xp / 200) * 100}
+                value={(user.xp / 100) * 100}
                 className="h-2 max-w-md mx-auto mb-2 bg-amber-100 dark:bg-amber-900/40"
               >
-                <div className="h-full bg-amber-500" style={{ width: `${(user.xp / 200) * 100}%` }} />
+                <div className="h-full bg-amber-500" style={{ width: `${(user.xp / 100) * 100}%` }} />
               </Progress>
-              <p className="text-sm text-muted-foreground">{user.xp}/200 XP to Level 2</p>
+              <p className="text-sm text-muted-foreground">{user.xp}/100 XP to Level 2</p>
             </div>
           )}
         </div>
