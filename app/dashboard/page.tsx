@@ -48,8 +48,8 @@ export default function DashboardPage() {
   }
 
   // Calculate XP progress to next level
-  const xpForCurrentLevel = user.level * 100
-  const xpForNextLevel = (user.level + 1) * 100
+  const xpForCurrentLevel = (user.level - 1) * 100
+  const xpForNextLevel = user.level * 100
   const xpProgress = ((user.xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100
 
   // Get favorite recipes

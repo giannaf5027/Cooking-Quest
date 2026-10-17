@@ -142,7 +142,7 @@ const MOCK_RECIPES = [
 export default function RecipeDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { user, toggleFavorite, isFavorite } = useAuth()
+  const { user, toggleFavorite, isFavorite, addXp } = useAuth()
   const [activeTab, setActiveTab] = useState("overview")
   const [liked, setLiked] = useState(false)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
@@ -174,6 +174,12 @@ export default function RecipeDetailPage() {
   const handleStepComplete = (stepIndex: number) => {
     if (!completedSteps.includes(stepIndex)) {
       setCompletedSteps((prev) => [...prev, stepIndex])
+
+      // completed steps doesn't really include this step yet , basically hence the +1
+      const doneCount = completedSteps.length + 1
+      if (doneCount === recipe.steps.length) {
+        addXp(recipe.xpReward)
+      }
     }
   }
 
