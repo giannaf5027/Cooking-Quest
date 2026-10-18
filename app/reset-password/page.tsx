@@ -55,10 +55,9 @@ export default function ResetPasswordPage() {
         description: "Your password has been reset. You can now log in with your new password.",
       })
     } catch (error) {
-      // show the real error message (ex: "Password reset coming soon")
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to reset password. The link may be expired or invalid.",
+        description: "Failed to reset password. The link may be expired or invalid.",
         variant: "destructive",
       })
     } finally {

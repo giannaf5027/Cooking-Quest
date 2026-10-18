@@ -18,7 +18,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { signUp } = useAuth()
+  const { signUp, users } = useAuth()
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +33,16 @@ export default function SignupPage() {
       return
     }
 
+    // Check if email already exists
+    if (users.some((user) => user.email === email)) {
+      toast({
+        title: "Email already in use",
+        description: "This email is already registered. Please use a different email or log in.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -42,10 +52,9 @@ export default function SignupPage() {
         description: "Welcome to CookMama! Your cooking adventure begins now.",
       })
     } catch (error) {
-      // show the error message from the api (ex: "Email already in use")
       toast({
         title: "Sign up failed",
-        description: error instanceof Error ? error.message : "There was a problem creating your account. Please try again.",
+        description: "There was a problem creating your account. Please try again.",
         variant: "destructive",
       })
     } finally {

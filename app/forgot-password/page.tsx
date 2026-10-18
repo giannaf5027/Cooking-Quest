@@ -33,10 +33,9 @@ export default function ForgotPasswordPage() {
         description: "Check your email for a link to reset your password.",
       })
     } catch (error) {
-      // show the real error message (ex: "Password reset coming soon")
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "We couldn't find an account with that email address.",
+        description: "We couldn't find an account with that email address.",
         variant: "destructive",
       })
     } finally {
