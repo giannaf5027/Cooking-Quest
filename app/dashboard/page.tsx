@@ -17,6 +17,7 @@ import { FriendSearch } from "@/components/friend-search"
 // Import the UserProfileView component and add state for viewing profile
 import { UserProfileView, type UserProfileData } from "@/components/user-profile-view"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { RecipeRequestBar } from "@/components/recipe-request-bar"
 
 // Mock recipe data
 const MOCK_RECIPES: any[] = [] // favorites populate once recipe data lands
@@ -357,6 +358,12 @@ export default function DashboardPage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Request a recipe */}
+      <div className="mt-8">
+        <RecipeRequestBar compact />
+      </div>
+
       {/* User Profile Dialog */}
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
