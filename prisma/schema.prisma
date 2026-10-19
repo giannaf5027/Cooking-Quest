@@ -19,3 +19,13 @@ model User {
   isAdmin         Boolean  @default(false)
   mascot          String   @default("chef")
 }
+
+// Recipe implementation requests submitted from the request bar (Purab, 10/13/2026)
+model RecipeRequest {
+  id          String   @id @default(cuid())
+  title       String
+  note        String?
+  requestedBy String?
+  status      String   @default("open") // open | planned | added | declined
+  createdAt   DateTime @default(now())
+}
