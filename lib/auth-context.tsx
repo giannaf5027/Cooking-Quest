@@ -131,6 +131,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     // add xp to user
+        // save xp and level to the database
+    const saveProgress = async (id: string, xp: number, level: number) => {
+        try {
+            const res = await fetch("/api/progress", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, xp, level }), //turn data into text before sending
+            })
+            if (!res.ok) {
+                const data = await res.json()
+                console.error("Saving progress failed:", data.error)
+            }
+        }
+        catch (error) {
+            console.error("Saving progress failed:", error)
+        }
+    }
     const addXp = (amount: number) => {
         if (!user) return
         const updatedUser = { ...user }
@@ -146,6 +163,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 updatedUser.availableRecipes = [...updatedUser.availableRecipes, "6"]
             }
         }
+                // send new pogers to database
+            saveProgress(updatedUser.id, updatedUser.xp, updatedUser.level)
         setUser(updatedUser)
         localStorage.setItem("cookmama_user", JSON.stringify(updatedUser))
     }
