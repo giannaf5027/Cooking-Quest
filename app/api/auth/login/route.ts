@@ -5,6 +5,7 @@
 import { NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { makeCard } from "@/lib/session"
 
 const prisma = new PrismaClient()
 
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
         }
 
+        // password is good, give them a login card
+        await makeCard(user.id)
         return NextResponse.json({
             id: user.id,
             name: user.name,
