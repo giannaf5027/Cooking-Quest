@@ -43,6 +43,7 @@ type User = {
     mascot: string // mascot is at the root
     level: number
     xp: number
+    loginStreak?: number // days in a row logged in
     isAdmin?: boolean
     favorites: string[]
     badges: string[]
@@ -71,7 +72,7 @@ type UserSettings = {
 type AuthContextType = {
     user: User | null
     isLoading: boolean
-    signIn: (usernameOrEmail: string, password: string) => Promise<void>
+    signIn: (usernameOrEmail: string, password: string) => Promise<{ gotStreakCredit: boolean; loginStreak: number }>
     signUp: (name: string, email: string, password: string) => Promise<void>
     signOut: () => void
     toggleFavorite: (recipeId: string) => void
@@ -233,6 +234,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 image: null,
                 level: data.level,
                 xp: data.xp,
+                loginStreak: data.loginStreak,
                 isAdmin: data.isAdmin,
                 favorites: [],
                 badges: [],
@@ -251,6 +253,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(loggedInUser)
             localStorage.setItem("cookmama_user", JSON.stringify(loggedInUser))
             router.push("/dashboard")
+            // login page uses this to show the streak banner
+            return { gotStreakCredit: data.gotStreakCredit === true, loginStreak: data.loginStreak ?? 0 }
         } finally {
             setIsLoading(false)
         }

@@ -30,10 +30,20 @@ export default function LoginPage() {
         setIsSubmitting(true)
 
         try {
-            await signIn(email, password)
+            const streak = await signIn(email, password)
+
+            // streak banner - only when today's login counted
+            let description = "You've successfully logged in."
+            if (streak.gotStreakCredit) {
+                if (streak.loginStreak === 1) {
+                    description = "🔥 Day 1 of your login streak! Come back tomorrow to keep it going."
+                } else {
+                    description = "🔥 " + streak.loginStreak + "-day login streak! Keep it up."
+                }
+            }
             toast({
                 title: "Welcome back!",
-                description: "You've successfully logged in.",
+                description: description,
             })
         } catch (error) {
             toast({

@@ -142,7 +142,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-gradient-to-br from-rose-50 to-white dark:from-rose-950/20 dark:to-background border-rose-100 dark:border-rose-900/20">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Level {user.level}</CardTitle>
@@ -181,6 +181,18 @@ export default function DashboardPage() {
               <div className="h-full bg-emerald-500" style={{ width: `${(badges.length / 20) * 100}%` }} />
             </Progress>
             <p className="text-sm text-muted-foreground mt-2">Complete challenges to earn more badges!</p>
+          </CardContent>
+        </Card>
+
+        {/* login streak card */}
+        <Card className="bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/20 dark:to-background border-orange-100 dark:border-orange-900/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Login Streak</CardTitle>
+            <CardDescription>Days in a row</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-orange-500">🔥 {user.loginStreak ?? 0}</p>
+            <p className="text-sm text-muted-foreground mt-2">Log in every day to keep your streak going!</p>
           </CardContent>
         </Card>
       </div>
