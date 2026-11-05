@@ -5,6 +5,8 @@
 import { NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { makeCard } from "@/lib/session"
+import { getDay, getNewStreak } from "@/lib/streaks"
 
 const prisma = new PrismaClient()
 
@@ -36,6 +38,20 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
         }
 
+        // password is good, give them a login card
+        await makeCard(user.id)
+
+        // login streak only counts once per day
+        const today = getDay(new Date())
+        const streak = getNewStreak(user.lastLoginDay, user.loginStreak, today)
+        // already logged in today 
+        if (streak.gotCredit) {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { loginStreak: streak.loginStreak, lastLoginDay: streak.lastLoginDay },
+            })
+        }
+
         return NextResponse.json({
             id: user.id,
             name: user.name,
@@ -44,6 +60,8 @@ export async function POST(req: Request) {
             level: user.level,
             isAdmin: user.isAdmin,
             mascot: user.mascot,
+            loginStreak: streak.loginStreak, // new number not the old one from user
+            gotStreakCredit: streak.gotCredit, // front end shows the banner if true
         })
     }
     catch (error) {
