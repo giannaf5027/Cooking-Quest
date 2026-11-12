@@ -4,6 +4,8 @@ import { checkCard } from "@/lib/session"
 
 
 const prisma = new PrismaClient()
+// this is the meal xp cooldown, one award per day. batch meal prep also counts as one award
+const COOLDOWN_MS = 24 * 60 * 60 * 1000
 // save xp and level progress
 export async function POST(req: Request) {
     try {
@@ -22,6 +24,9 @@ export async function POST(req: Request) {
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 })
         }
+        if (user.lastXpAt && Date.now() - user.lastXpAt.getTime() < COOLDOWN_MS) {
+            return NextResponse.json({ error: "Meal xp cooldown active, try again later" }, { status: 429 })
+        }
         // cant let saved progress go backwards
         if (xp < user.xp || level < user.level) {
             return NextResponse.json({ error: "Progress can't go down" }, { status: 409 })
@@ -29,7 +34,7 @@ export async function POST(req: Request) {
         // save/update progress
         const updated = await prisma.user.update({
             where: { id },
-            data: { xp, level },
+            data: { xp, level, lastXpAt: new Date() },
         })
         return NextResponse.json({ xp: updated.xp, level: updated.level })
     }
