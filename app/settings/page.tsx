@@ -13,6 +13,7 @@ import { ChevronLeft, ChefHat, Music, Palette, Award, VolumeX, Volume2, Check, L
 import Link from "next/link"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
+import { getEarnedBadges } from "@/lib/badges"
 
 // Mock music tracks
 const MUSIC_TRACKS = [
@@ -20,17 +21,6 @@ const MUSIC_TRACKS = [
   { id: "2", title: "Cooking Jazz", src: "/music/cooking-jazz.mp3" },
   { id: "3", title: "Italian Vibes", src: "/music/italian-vibes.mp3" },
   { id: "4", title: "Asian Fusion", src: "/music/asian-fusion.mp3" },
-]
-
-// Mock badge data
-const MOCK_BADGES = [
-  { id: "pasta-master", name: "Pasta Master", image: PH, description: "Cooked 10 pasta dishes", unlocked: true },
-  { id: "sweet-tooth", name: "Sweet Tooth", image: PH, description: "Baked 5 desserts", unlocked: true },
-  { id: "quick-chef", name: "Quick Chef", image: PH, description: "Completed 3 recipes under 20 minutes", unlocked: true },
-  { id: "spice-warrior", name: "Spice Warrior", image: PH, description: "Cooked 5 spicy dishes", unlocked: true },
-  { id: "healthy-eater", name: "Healthy Eater", image: PH, description: "Cooked 10 vegetarian meals", unlocked: true },
-  { id: "master-chef", name: "Master Chef", image: PH, description: "Reached level 10", unlocked: false },
-  { id: "social-butterfly", name: "Social Butterfly", image: PH, description: "Connected with 10 friends", unlocked: false },
 ]
 
 export default function SettingsPage() {
@@ -104,8 +94,8 @@ export default function SettingsPage() {
     }
   }
 
-  // Get user's unlocked badges
-  const unlockedBadges = MOCK_BADGES.filter((badge) => badge.unlocked)
+  // Get user's unlocked badges (KAN-6, xp milestones)
+  const unlockedBadges = getEarnedBadges(user.xp)
 
   return (
     <div className="container py-8 px-4 max-w-4xl mx-auto">
@@ -291,7 +281,7 @@ export default function SettingsPage() {
                               <img src={PH} alt={badge.name} className="w-12 h-12" />
                             </div>
                             <h3 className="font-medium text-sm">{badge.name}</h3>
-                            <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                           </div>
                         ))
                     ) : (
@@ -315,7 +305,7 @@ export default function SettingsPage() {
                             <img src={PH} alt={badge.name} className="w-12 h-12" />
                           </div>
                           <h3 className="font-medium text-sm">{badge.name}</h3>
-                          <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                         </div>
                       ))}
                   </div>
