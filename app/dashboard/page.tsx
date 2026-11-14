@@ -18,6 +18,8 @@ import { FriendSearch } from "@/components/friend-search"
 import { UserProfileView, type UserProfileData } from "@/components/user-profile-view"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { RecipeRequestBar } from "@/components/recipe-request-bar"
+import { BADGES, getEarnedBadges } from "@/lib/badges"
+import { BadgeIcon } from "@/components/badge-icon"
 
 // Mock recipe data
 const MOCK_RECIPES: any[] = [] // favorites populate once recipe data lands
@@ -73,23 +75,8 @@ export default function DashboardPage() {
     },
   ]
 
-  const badges =
-    user.badges.length > 0
-      ? [
-          {
-            id: "pasta-master",
-            name: "Pasta Master",
-            image: PH,
-            description: "Cooked 10 pasta dishes",
-          },
-          {
-            id: "sweet-tooth",
-            name: "Sweet Tooth",
-            image: PH,
-            description: "Baked 5 desserts",
-          },
-        ]
-      : []
+  // badges earned so far, based on total xp (KAN-6)
+  const badges = getEarnedBadges(user.xp)
 
   const friends =
     user.friends.length > 0
@@ -174,11 +161,11 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background border-emerald-100 dark:border-emerald-900/20">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Badges Earned</CardTitle>
-            <CardDescription>{badges.length}/20 badges</CardDescription>
+            <CardDescription>{badges.length}/{BADGES.length} badges</CardDescription>
           </CardHeader>
           <CardContent>
-            <Progress value={(badges.length / 20) * 100} className="h-2 bg-emerald-100 dark:bg-emerald-900/20">
-              <div className="h-full bg-emerald-500" style={{ width: `${(badges.length / 20) * 100}%` }} />
+            <Progress value={(badges.length / BADGES.length) * 100} className="h-2 bg-emerald-100 dark:bg-emerald-900/20">
+              <div className="h-full bg-emerald-500" style={{ width: `${(badges.length / BADGES.length) * 100}%` }} />
             </Progress>
             <p className="text-sm text-muted-foreground mt-2">Complete challenges to earn more badges!</p>
           </CardContent>
@@ -291,11 +278,9 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {badges.map((badge) => (
                 <div key={badge.id} className="flex flex-col items-center p-4 border rounded-lg text-center bg-card">
-                  <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                    <img src={PH} alt={badge.name} className="w-12 h-12" />
-                  </div>
+                  <BadgeIcon badge={badge} width={64} className="mb-2" />
                   <h3 className="font-medium text-sm">{badge.name}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                 </div>
               ))}
             </div>
