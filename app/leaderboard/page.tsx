@@ -8,32 +8,24 @@ import { useAuth } from "@/lib/auth-context"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Trophy, ChefHat } from "lucide-react"
 
-type LeaderboardEntry = {
-    id: string
-    name: string | null
-    email: string
-    xp: number
-    level: number
-}
-
 export default function LeaderboardPage() {
     const { user, isLoading } = useAuth()
     const router = useRouter()
-    const [entries, setEntries] = useState<LeaderboardEntry[]>([])
-    const [loadingEntries, setLoadingEntries] = useState(true)
+    const [entries, setEntries] = useState<any[]>([])
 
     useEffect(() => {
         if (!isLoading && !user) {
             router.push("/login")
             return
         }
-        if (user) {
-            fetch("/api/leaderboard")
-                .then((res) => res.json())
-                .then((data) => setEntries(Array.isArray(data) ? data : []))
-                .catch((error) => console.error("Loading leaderboard failed:", error))
-                .finally(() => setLoadingEntries(false))
+        if (!user) return
+
+        const loadLeaderboard = async () => {
+            const res = await fetch("/api/leaderboard")
+            const data = await res.json()
+            setEntries(data)
         }
+        loadLeaderboard()
     }, [user, isLoading, router])
 
     if (isLoading || !user) {
@@ -59,28 +51,23 @@ export default function LeaderboardPage() {
                     <CardTitle className="text-lg">Ranked by XP</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {loadingEntries ? (
-                        <p className="text-muted-foreground">Loading rankings...</p>
-                    ) : entries.length === 0 ? (
-                        <p className="text-muted-foreground">No chefs on the board yet.</p>
-                    ) : (
-                        <div className="space-y-2">
-                            {entries.map((entry, index) => (
-                                <div
-                                    key={entry.id}
-                                    className={`flex items-center justify-between p-3 rounded-lg ${
-                                        entry.id === user.id ? "bg-rose-100 dark:bg-rose-900/20" : "bg-muted/30"
-                                    }`}
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <span className="w-6 text-center font-bold text-muted-foreground">{index + 1}</span>
-                                        <span className="font-medium">{entry.name || entry.email}</span>
-                                    </div>
-                                    <span className="text-sm text-muted-foreground">{entry.xp} XP</span>
+                    {entries.length === 0 && <p className="text-muted-foreground">No chefs on the board yet.</p>}
+                    <div className="space-y-2">
+                        {entries.map((entry, index) => (
+                            <div
+                                key={entry.id}
+                                className={`flex items-center justify-between p-3 rounded-lg ${
+                                    entry.id === user.id ? "bg-rose-100 dark:bg-rose-900/20" : "bg-muted/30"
+                                }`}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <span className="w-6 text-center font-bold text-muted-foreground">{index + 1}</span>
+                                    <span className="font-medium">{entry.name || "Unnamed Chef"}</span>
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                                <span className="text-sm text-muted-foreground">{entry.xp} XP</span>
+                            </div>
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
         </div>

@@ -15,7 +15,7 @@ export async function GET() {
         const users = await prisma.user.findMany({
             orderBy: { xp: "desc" },
             take: 20,
-            select: { id: true, name: true, email: true, xp: true, level: true },
+            select: { id: true, name: true, xp: true },
         })
         return NextResponse.json(users)
     }
