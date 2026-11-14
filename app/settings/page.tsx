@@ -14,6 +14,7 @@ import Link from "next/link"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { getEarnedBadges } from "@/lib/badges"
+import { BadgeIcon } from "@/components/badge-icon"
 
 // Mock music tracks
 const MUSIC_TRACKS = [
@@ -277,9 +278,7 @@ export default function SettingsPage() {
                             className="flex flex-col items-center p-4 border rounded-lg text-center bg-card cursor-pointer hover:bg-accent"
                             onClick={() => toggleBadge(badge.id)}
                           >
-                            <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                              <img src={PH} alt={badge.name} className="w-12 h-12" />
-                            </div>
+                            <BadgeIcon badge={badge} width={64} className="mb-2" />
                             <h3 className="font-medium text-sm">{badge.name}</h3>
                             <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                           </div>
@@ -301,9 +300,7 @@ export default function SettingsPage() {
                           className="flex flex-col items-center p-4 border rounded-lg text-center bg-card cursor-pointer hover:bg-accent"
                           onClick={() => toggleBadge(badge.id)}
                         >
-                          <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                            <img src={PH} alt={badge.name} className="w-12 h-12" />
-                          </div>
+                          <BadgeIcon badge={badge} width={64} className="mb-2" />
                           <h3 className="font-medium text-sm">{badge.name}</h3>
                           <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                         </div>

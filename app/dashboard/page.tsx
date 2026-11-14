@@ -19,6 +19,7 @@ import { UserProfileView, type UserProfileData } from "@/components/user-profile
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { RecipeRequestBar } from "@/components/recipe-request-bar"
 import { BADGES, getEarnedBadges } from "@/lib/badges"
+import { BadgeIcon } from "@/components/badge-icon"
 
 // Mock recipe data
 const MOCK_RECIPES: any[] = [] // favorites populate once recipe data lands
@@ -277,9 +278,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {badges.map((badge) => (
                 <div key={badge.id} className="flex flex-col items-center p-4 border rounded-lg text-center bg-card">
-                  <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-2">
-                    <img src={PH} alt={badge.name} className="w-12 h-12" />
-                  </div>
+                  <BadgeIcon badge={badge} width={64} className="mb-2" />
                   <h3 className="font-medium text-sm">{badge.name}</h3>
                   <p className="text-xs text-muted-foreground mt-1">Reach {badge.xpRequired} XP</p>
                 </div>
