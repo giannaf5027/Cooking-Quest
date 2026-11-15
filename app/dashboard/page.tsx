@@ -31,6 +31,8 @@ export default function DashboardPage() {
   // Add this to the component, after the state variables:
   const [viewingProfile, setViewingProfile] = useState<UserProfileData | null>(null)
   const [profileDialogOpen, setProfileDialogOpen] = useState(false)
+  const [friends, setFriends] = useState<any[]>([])
+  const [incomingRequests, setIncomingRequests] = useState<any[]>([])
 
   // Redirect if not logged in
   useEffect(() => {
@@ -38,6 +40,30 @@ export default function DashboardPage() {
       router.push("/login")
     }
   }, [user, isLoading, router])
+
+  // load real friends + incoming friend requests
+  // the useEffect(() => { if (user) ... } ) guard is from a stackoverflow answer about
+  // fetching data only after a context value loads, cant remember which post it was
+  const loadFriends = async () => {
+    const res = await fetch("/api/friends")
+    const data = await res.json()
+    setFriends(data.friends)
+    setIncomingRequests(data.incoming)
+  }
+
+  useEffect(() => {
+    if (user) loadFriends()
+  }, [user])
+
+  // accept or decline an incoming friend request
+  const respondToRequest = async (requestId: string, accept: boolean) => {
+    await fetch("/api/friends/respond", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestId, accept }),
+    })
+    loadFriends()
+  }
 
   if (isLoading || !user) {
     return (
@@ -77,15 +103,6 @@ export default function DashboardPage() {
 
   // badges earned so far, based on total xp (KAN-6)
   const badges = getEarnedBadges(user.xp)
-
-  const friends =
-    user.friends.length > 0
-      ? [
-          { id: "friend1", name: "Jane Smith", image: PH, level: 5 },
-          { id: "friend2", name: "Mike Johnson", image: PH, level: 7 },
-          { id: "friend3", name: "Sarah Williams", image: PH, level: 4 },
-        ]
-      : []
 
   // Add openProfile function inside the component before return:
   const openProfile = (userId: string) => {
@@ -316,6 +333,32 @@ export default function DashboardPage() {
               <FriendSearch />
             </CardContent>
           </Card>
+
+          {incomingRequests.length > 0 && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Friend Requests</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {incomingRequests.map((req) => (
+                  <div key={req.requestId} className="flex items-center justify-between p-3 border rounded-md">
+                    <div>
+                      <p className="font-medium">{req.name}</p>
+                      <p className="text-xs text-muted-foreground">Level {req.level}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => respondToRequest(req.requestId, true)}>
+                        Accept
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => respondToRequest(req.requestId, false)}>
+                        Decline
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
 
           {friends.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
