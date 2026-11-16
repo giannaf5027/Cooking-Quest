@@ -20,6 +20,7 @@ model User {
   mascot          String   @default("chef")
   loginStreak     Int      @default(0)
   lastLoginDay    String?
+  lastXpAt        DateTime?
 }
 
 // Recipe implementation requests submitted from the request bar (Purab, 10/13/2026)
