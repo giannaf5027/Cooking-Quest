@@ -9,6 +9,7 @@
 
 import { NextResponse } from "next/server"
 import type { PrismaClient } from "@prisma/client"
+import { checkCard } from "@/lib/session"
 
 type RecipeRequest = {
     id: string
@@ -59,13 +60,16 @@ export async function GET() {
     }
 }
 
-// POST /api/recipe-requests — body: { title, note?, requestedBy? }
+// POST /api/recipe-requests — body: { title, note? } — requester comes from the session cookie, not the body
 export async function POST(req: Request) {
     try {
+        const userId = await checkCard()
+        if (userId == null) {
+            return NextResponse.json({ error: "Please Login and try again" }, { status: 401 })
+        }
         const body = await req.json()
         const title = typeof body.title === "string" ? body.title.trim() : ""
         const note = typeof body.note === "string" && body.note.trim() ? body.note.trim().slice(0, 500) : null
-        const requestedBy = typeof body.requestedBy === "string" && body.requestedBy.trim() ? body.requestedBy.trim() : null
 
         // validate
         if (title.length < 3) {
@@ -76,6 +80,9 @@ export async function POST(req: Request) {
         }
 
         if (await useDb() && prisma) {
+            // look up real name, not whatever body claimed
+            const requester = await prisma.user.findUnique({ where: { id: userId } })
+            const requestedBy = requester?.name ?? requester?.email ?? userId
             // avoid duplicate open requests for the same recipe
             const existing = await prisma.recipeRequest.findFirst({
                 where: { title: { equals: title, mode: "insensitive" }, status: "open" },
@@ -93,6 +100,7 @@ export async function POST(req: Request) {
         if (dup) {
             return NextResponse.json({ error: "That recipe has already been requested", request: dup }, { status: 409 })
         }
+        const requestedBy = userId
         const created: RecipeRequest = {
             id: `req_${Date.now()}`,
             title,
