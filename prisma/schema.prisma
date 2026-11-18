@@ -23,6 +23,7 @@ model User {
   emailVerified   Boolean  @default(true)
   verificationToken String?
   verificationTokenExpiry DateTime?
+  lastXpAt        DateTime?
 }
 
 // Recipe implementation requests submitted from the request bar (Purab, 10/13/2026)

@@ -91,6 +91,14 @@ export default function Navbar() {
                 >
                   Recipes
                 </Link>
+                <Link
+                  href="/leaderboard"
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
+                    pathname === "/leaderboard" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  Leaderboard
+                </Link>
               </>
             )}
           </nav>
