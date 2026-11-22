@@ -5,6 +5,7 @@
 import { NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import crypto from "crypto"
 import { makeCard } from "@/lib/session"
 
 const prisma = new PrismaClient()
@@ -26,12 +27,26 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Email already in use" }, { status: 409 })
         }
 
-        // hash the password then create the user
+        // hash the password then create the user, new accounts start unverified
         const hashedPassword = await bcrypt.hash(password, 10)
 
+        // verification link expires in 24 hours
+        const token = crypto.randomBytes(32).toString("hex")
+        const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
         const user = await prisma.user.create({
-            data: { name, email, password: hashedPassword },
+            data: {
+                name,
+                email,
+                password: hashedPassword,
+                emailVerified: false,
+                verificationToken: token,
+                verificationTokenExpiry: expiry,
+            },
         })
+
+        // haven't set up email yet so the link just gets logged, adding email within the next few days
+        console.log(`Verify link: /verify-email?token=${token}`)
 
         // new accounts get logged in right away so they need a card too
         await makeCard(user.id)

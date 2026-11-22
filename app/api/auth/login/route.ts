@@ -38,6 +38,11 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
         }
 
+        // this makes sure unverified accounts are not able to log in
+        if (!user.emailVerified) {
+            return NextResponse.json({ error: "Verify your email first" }, { status: 403 })
+        }
+
         // password is good, give them a login card
         await makeCard(user.id)
 

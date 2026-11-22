@@ -20,6 +20,9 @@ model User {
   mascot          String   @default("chef")
   loginStreak     Int      @default(0)
   lastLoginDay    String?
+  emailVerified   Boolean  @default(true)
+  verificationToken String?
+  verificationTokenExpiry DateTime?
   lastXpAt        DateTime?
 }
 
