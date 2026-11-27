@@ -35,3 +35,12 @@ model RecipeRequest {
   status      String   @default("open") // open | planned | added | declined
   createdAt   DateTime @default(now())
 }
+
+// Friend requests - one row covers both the pending ask and the accepted friendship
+model FriendRequest {
+  id          String   @id @default(cuid())
+  requesterId String
+  receiverId  String
+  status      String   @default("pending") // pending | accepted
+  createdAt   DateTime @default(now())
+}
