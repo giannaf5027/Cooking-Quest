@@ -1,3 +1,7 @@
+//
+// Created by Karson on 11/15/2026.
+//
+
 // accept or decline a friend request
 
 import { NextResponse } from "next/server"

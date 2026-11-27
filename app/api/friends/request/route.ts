@@ -1,3 +1,7 @@
+//
+// Created by Karson on 11/15/2026.
+//
+
 // send a friend request
 
 import { NextResponse } from "next/server"

@@ -1,3 +1,7 @@
+//
+// Created by Karson on 11/15/2026.
+//
+
 // friends list + pending requests
 
 import { NextResponse } from "next/server"
@@ -28,7 +32,7 @@ export async function GET() {
         const otherIds = [...friendIds, ...incoming.map((r) => r.requesterId)]
         const users = await prisma.user.findMany({
             where: { id: { in: otherIds } },
-            select: { id: true, name: true, level: true },
+            select: { id: true, name: true, level: true, xp: true },
         })
         const userById = (userId: string) => users.find((u) => u.id === userId)
 

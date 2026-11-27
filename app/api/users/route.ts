@@ -1,3 +1,7 @@
+//
+// Created by Karson on 11/15/2026.
+//
+
 // list of other users to search for friends
 
 import { NextResponse } from "next/server"
@@ -14,7 +18,7 @@ export async function GET() {
         }
         const users = await prisma.user.findMany({
             where: { id: { not: id } },
-            select: { id: true, name: true, level: true },
+            select: { id: true, name: true, level: true, xp: true },
         })
         return NextResponse.json(users)
     }

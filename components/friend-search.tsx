@@ -7,6 +7,11 @@ import { Search, UserPlus, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
+// how much xp someone needs to reach their next level (each level is 100 xp)
+function xpToNextLevel(xp: number) {
+    return 100 - (xp % 100)
+}
+
 export function FriendSearch() {
     const [searchQuery, setSearchQuery] = useState("")
     const [allUsers, setAllUsers] = useState<any[]>([])
@@ -68,7 +73,7 @@ export function FriendSearch() {
                                 </div>
                                 <div>
                                     <p className="font-medium">{u.name}</p>
-                                    <p className="text-xs text-muted-foreground">Level {u.level}</p>
+                                    <p className="text-xs text-muted-foreground">Level {u.level} · {xpToNextLevel(u.xp)} XP to next level</p>
                                 </div>
                             </div>
                             <Button variant="outline" size="sm" className="gap-1" onClick={() => sendFriendRequest(u.id)}>
@@ -97,7 +102,7 @@ export function FriendSearch() {
                                             </div>
                                             <div>
                                                 <p className="font-medium">{u.name}</p>
-                                                <p className="text-xs text-muted-foreground">Level {u.level}</p>
+                                                <p className="text-xs text-muted-foreground">Level {u.level} · {xpToNextLevel(u.xp)} XP to next level</p>
                                             </div>
                                         </div>
                                         <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground" disabled>

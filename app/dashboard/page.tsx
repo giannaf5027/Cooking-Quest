@@ -65,6 +65,9 @@ export default function DashboardPage() {
     loadFriends()
   }
 
+  // how much xp someone needs to reach their next level (each level is 100 xp)
+  const xpToNextLevel = (xp: number) => 100 - (xp % 100)
+
   if (isLoading || !user) {
     return (
       <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)]">
@@ -344,7 +347,7 @@ export default function DashboardPage() {
                   <div key={req.requestId} className="flex items-center justify-between p-3 border rounded-md">
                     <div>
                       <p className="font-medium">{req.name}</p>
-                      <p className="text-xs text-muted-foreground">Level {req.level}</p>
+                      <p className="text-xs text-muted-foreground">Level {req.level} · {xpToNextLevel(req.xp)} XP to next level</p>
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" onClick={() => respondToRequest(req.requestId, true)}>
@@ -373,7 +376,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-medium">{friend.name}</h3>
-                    <p className="text-sm text-muted-foreground">Level {friend.level}</p>
+                    <p className="text-sm text-muted-foreground">Level {friend.level} · {xpToNextLevel(friend.xp)} XP to next level</p>
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" variant="ghost" className="text-rose-500">
