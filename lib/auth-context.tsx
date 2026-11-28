@@ -8,7 +8,11 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { isSameDay } from "date-fns"
+import { format } from "date-fns"
+
+// new plans save the date like 2026-11-22 instead of a timestamp so a timezone shift can't screw it up
+export const planDayKey = (value: string | number | Date): string =>
+    /^\d{4}-\d{2}-\d{2}$/.test(String(value)) ? String(value) : format(new Date(value), "yyyy-MM-dd")
 
 // activity type
 type Activity = {
@@ -25,7 +29,7 @@ type Activity = {
 
 // meal plan type
 type MealPlan = {
-    date: string // ISO string
+    date: string
     meals: {
         id: string
         title: string
@@ -149,6 +153,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
+    // save the meal plan to the database
+    const saveMealPlan = async (mealPlans: MealPlan[]) => {
+        try {
+            const res = await fetch("/api/meal-plan", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mealPlans }),
+            })
+            if (!res.ok) {
+                const data = await res.json()
+                console.error("Saving meal plan failed:", data.error)
+            }
+        }
+        catch (error) {
+            console.error("Saving meal plan failed:", error)
+        }
+    }
+
     // add xp to user
     const addXp = (amount: number) => {
         if (!user) return
@@ -179,8 +201,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     ) => {
         if (!user) return
         const updatedUser = { ...user }
-        const dateString = date.toISOString()
-        const existingPlanIndex = updatedUser.mealPlans.findIndex((plan) => isSameDay(new Date(plan.date), date))
+        const dayKey = format(date, "yyyy-MM-dd")
+        const existingPlanIndex = updatedUser.mealPlans.findIndex((plan) => planDayKey(plan.date) === dayKey)
         if (existingPlanIndex >= 0) {
             if (meal) {
                 updatedUser.mealPlans[existingPlanIndex].meals.push(meal as any)
@@ -193,18 +215,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         else if (meal) {
             updatedUser.mealPlans.push({
-                date: dateString,
+                date: dayKey,
                 meals: [meal as any],
             })
         }
         setUser(updatedUser)
         localStorage.setItem("cookmama_user", JSON.stringify(updatedUser))
+        // also save to the database so it survives a new login or browser
+        saveMealPlan(updatedUser.mealPlans)
     }
 
     // get meal plan for a specific date
     const getMealPlan = (date: Date) => {
         if (!user) return undefined
-        return user.mealPlans.find((plan) => isSameDay(new Date(plan.date), date))
+        return user.mealPlans.find((plan) => planDayKey(plan.date) === format(date, "yyyy-MM-dd"))
     }
 
     // recipes unlocked at a given level (same rules as addXp)
@@ -239,7 +263,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 favorites: [],
                 badges: [],
                 friends: [],
-                mealPlans: [],
+                mealPlans: data.mealPlans ?? [], // using the api now so we're not using a hardcoded list
                 availableRecipes: recipesForLevel(data.level),
                 mascot: data.mascot,
                 activities: [],

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ChefHat, User, Search, Home, LogOut, Settings, Gamepad2 } from "lucide-react"
+import { ChefHat, User, Search, Home, LogOut, Settings, Gamepad2, ShoppingBasket } from "lucide-react"
 
 // Get emoji for mascot
 function getMascotEmoji(mascot: string): string {
@@ -90,6 +90,14 @@ export default function Navbar() {
                   }`}
                 >
                   Recipes
+                </Link>
+                <Link
+                  href="/grocery-list"
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
+                    pathname === "/grocery-list" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  Grocery List
                 </Link>
                 <Link
                   href="/leaderboard"
@@ -168,6 +176,12 @@ export default function Navbar() {
                   <Link href="/recipes" className="cursor-pointer">
                     <Search className="mr-2 h-4 w-4" />
                     <span>Find Recipes</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/grocery-list" className="cursor-pointer">
+                    <ShoppingBasket className="mr-2 h-4 w-4" />
+                    <span>Grocery List</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
