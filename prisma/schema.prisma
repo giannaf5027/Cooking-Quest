@@ -24,6 +24,7 @@ model User {
   verificationToken String?
   verificationTokenExpiry DateTime?
   lastXpAt        DateTime?
+  mealPlans       Json?
 }
 
 // Recipe implementation requests submitted from the request bar (Purab, 10/13/2026)

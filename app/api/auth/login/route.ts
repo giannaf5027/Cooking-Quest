@@ -65,6 +65,7 @@ export async function POST(req: Request) {
             level: user.level,
             isAdmin: user.isAdmin,
             mascot: user.mascot,
+            mealPlans: user.mealPlans ?? [], // send the plans back so the front end keeps them
             loginStreak: streak.loginStreak, // new number not the old one from user
             gotStreakCredit: streak.gotCredit, // front end shows the banner if true
         })
